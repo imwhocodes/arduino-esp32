@@ -168,6 +168,8 @@ public:
     size_t setRxBufferSize(size_t new_size);
     size_t setTxBufferSize(size_t new_size);
 
+    unsigned long detectBaudRate(const unsigned long timeout_ms);
+
 protected:
     int _uart_nr;
     uart_t* _uart;

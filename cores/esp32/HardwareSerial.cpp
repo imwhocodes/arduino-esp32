@@ -173,6 +173,25 @@ HardwareSerial::~HardwareSerial()
 }
 
 
+unsigned long HardwareSerial::detectBaudRate(const unsigned long timeout_ms)
+{
+    uartStartDetectBaudrate(_uart);
+
+    unsigned long detectedBaudRate = 0;
+
+    unsigned long start_detection = millis();
+
+    while( ( ( ( millis() - start_detection ) < timeout_ms ) || timeout_ms == 0 ) && ( !( detectedBaudRate = uartDetectBaudrate(_uart) ) ) ){
+        delay(1);
+    };
+
+    return detectedBaudRate;
+
+}
+
+
+
+
 void HardwareSerial::_createEventTask(void *args)
 {
     // Creating UART event Task

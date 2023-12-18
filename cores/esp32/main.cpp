@@ -65,8 +65,7 @@ extern "C" void app_main()
 #endif
 #if ARDUINO_USB_ON_BOOT && !ARDUINO_USB_MODE
     USB.begin();
-#endif
-    loopTaskWDTEnabled = false;
+#endif    loopTaskWDTEnabled = false;
     initArduino();
     xTaskCreateUniversal(loopTask, "loopTask", getArduinoLoopTaskStackSize(), NULL, 1, &loopTaskHandle, ARDUINO_RUNNING_CORE);
 }

@@ -697,6 +697,10 @@ void uartStartDetectBaudrate(uart_t *uart) {
     hw->rx_filt.glitch_filt = 0x08;
     hw->rx_filt.glitch_filt_en = 1;
     hw->conf0.autobaud_en = 0;
+    hw->lowpulse.lowpulse_min_cnt = 0;
+    hw->highpulse.highpulse_min_cnt = 0;
+    hw->id.reg_update = 1;
+    while (hw->id.reg_update);
     hw->conf0.autobaud_en = 1;
 #else
     uart_dev_t *hw = UART_LL_GET_HW(uart->num);
@@ -744,6 +748,10 @@ uartDetectBaudrate(uart_t *uart)
         uart_sclk_t clk_src;
         uart_ll_get_sclk(hw, &clk_src);
 
+        // uint32_t test; 
+
+        // uart_get_sclk_freq(clk_src, &test);
+
         switch(clk_src)
         {
         case UART_SCLK_APB:
@@ -759,8 +767,10 @@ uartDetectBaudrate(uart_t *uart)
 
         #if SOC_UART_SUPPORT_XTAL_CLK
             case UART_SCLK_XTAL:
-                baudrate = (getXtalFrequencyMhz() * 1000000) / divisor;
-            break;
+            {
+                const auto frq = getXtalFrequencyMhz() * 1000000;
+                baudrate = frq / divisor;
+            } break;
         #endif
 
         default:
